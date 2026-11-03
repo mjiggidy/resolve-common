@@ -1,7 +1,0 @@
-.DS_Store
-.vscode
-.venv
-__pycache__
-*.egg-info
-build
-.gitignore
