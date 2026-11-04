@@ -4,29 +4,23 @@ import typing, logging
 if typing.TYPE_CHECKING:
 	import DaVinciResolveScript as dvrtypes
 
-def _search_folder_path(target_folder:dvrtypes.Folder, start_folder:dvrtypes.Folder, accumulated_path:str=""):
-	"""Accumulate folder paths"""
-	
-	accumulated_path += "/" + start_folder.GetName()
-
-	if start_folder.GetUniqueId() == target_folder.GetUniqueId():
-		return accumulated_path
-	
-	for subfolder in start_folder.GetSubFolderList():
-
-		try:
-			subfolder_path = _search_folder_path(target_folder, subfolder, accumulated_path)
-		except FileNotFoundError:
-			continue
-		else:
-			return subfolder_path
-
-	raise FileNotFoundError
+PATH_SEP = "/"
+"""Path separator for media pool folder paths"""
 
 def get_path_from_folder(target_folder:dvrtypes.Folder, relative_to:dvrtypes.Folder) -> str:
 	"""Resolve a folder path from a given handle"""
 
-	return _search_folder_path(target_folder, relative_to)
+	parts = []
+
+	while target_folder:
+
+		if target_folder.GetUniqueId() == relative_to.GetUniqueId():
+			break
+		
+		parts.append(target_folder)
+		target_folder = target_folder.GetParentFolder()
+
+	return PATH_SEP.join(f.GetName() for f in reversed(parts))
 
 def get_folder_from_path(path:str, root_folder:dvrtypes.Folder) -> dvrtypes.Folder:
 	"""Get a Media Pool Folder object from a given pathlike string"""
@@ -36,7 +30,7 @@ def get_folder_from_path(path:str, root_folder:dvrtypes.Folder) -> dvrtypes.Fold
 	
 	current_folder = root_folder
 	
-	for search_folder_name in path.strip("/").split("/"):
+	for search_folder_name in path.strip(PATH_SEP).split(PATH_SEP):
 		
 		logging.getLogger(__name__).debug("In \"%s\" looking for \"%s\"", current_folder.GetName(), search_folder_name)
 		
