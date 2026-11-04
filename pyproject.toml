@@ -13,6 +13,9 @@ authors = [
 	{ name = "Michael J. Jordan", email = "michael@glowingpixel.com" }
 ]
 
+dependencies = [
+	"timecode @ git+https://github.com/mjiggidy/timecode.git@v1.0.0",
+]
+
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["resolvecommon*"]
