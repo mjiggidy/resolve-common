@@ -2,7 +2,7 @@ from __future__ import annotations
 import enum, typing
 
 if typing.TYPE_CHECKING:
-	import DaVinciResolveScript as bmd
+	import DaVinciResolveScript as dvrtypes
 
 class ItemTypes(enum.StrEnum):
 	"""Media pool item (clip) types"""
@@ -26,7 +26,7 @@ class ItemTypes(enum.StrEnum):
 	PHOTO_ALBUM = "Photo Album"
 
 	@classmethod
-	def from_media_pool_item(cls, media_pool_item:bmd.MediaPoolItem) -> typing.Self:
+	def from_media_pool_item(cls, media_pool_item:dvrtypes.MediaPoolItem) -> typing.Self:
 		"""Return a type for a given Media Pool Item"""
 		
 		return cls(media_pool_item.GetClipProperty("Type"))
